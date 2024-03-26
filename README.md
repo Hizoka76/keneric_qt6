@@ -51,7 +51,7 @@ Ces fichiers qui servaient à ajouter des liens entre **keneric.so** et **Dolphi
 Il n'est malheureusement plus aussi facile de créer des liens dans **Dolphin**.
 Les mimetypes sont maintenant définis dans le fichier **kenericthumbnail.json** qui doit être recompilé après modification.
 
-Il serait envisageable de n'utiliser que keneric en indiquant un mimetype //application/octet-stream// (qui semble remplacer //all/all-files//).
+Il serait envisageable de n'utiliser que keneric en indiquant un mimetype *application/octet-stream* (qui semble remplacer *all/all-files*).
 Il faudrait alors gérer les différents mimetypes dans des sous-scripts keneric.
 
 #### Fichier keneric.so :
@@ -61,7 +61,7 @@ Il faudrait alors gérer les différents mimetypes dans des sous-scripts keneric
 Les arguments passés au script sont :
  - L'adresse du fichier attendant une vignette.
  - Le mimetype de ce fichier.
- - L'URL de la vignette temporaire (///tmp/keneric/...//) que chargera **keneric.so**
+ - L'URL de la vignette temporaire (*/tmp/keneric/...*) que chargera **keneric.so**
 
 **keneric.so** chargera cette vignette temporaire et, si est valide, la fournira à **Dolphin** qui l'affichera.
 
@@ -74,7 +74,7 @@ echo "$PATH"
 ```
 
 #### Script bash proposé
-Le git propose un script **keneric** gérant les mimetypes //mkv// et //directory//.
+Le git propose un script **keneric** gérant les mimetypes *mkv* et *directory*.
 
 Afin de faciliter le développement de nouvelles fonctionnalités, ce script charge des sous-scripts.
 
