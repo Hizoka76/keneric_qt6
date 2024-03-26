@@ -109,6 +109,7 @@ La couleur du contour s'adapte à la résolution de la vidéo et à la 3D.
 Les fichiers desktop ont été modifiés pour s'adapter à KDE6.
 Il est **impératif** de rendre ces fichiers exécutables.
 Ces fichiers doivent maintenant être placés dans le dossier **.local/share/kio/servicemenus/** (//ou /usr/share/kio/servicemenus//).
+__SEPARATOR__ ne fonctionne plus en KDE6.
 
 Des services en liens sont également proposés :
  - Le [dossier KenericHashFile](KenericHashFile) propose de copier le hash d'un élément.
