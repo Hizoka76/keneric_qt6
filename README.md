@@ -18,12 +18,14 @@ L'idée du de base a été créé par Rog131 <samrog131@hotmail.com> mais le fon
 
 ### Installation :
 #### Depuis les sources :
-Pour les dérivés d'Ubuntu, la compilation necessite l'installation de paquets : 
-```sudo apt install cmake build-essential kf6-kio-dev kf6-kcoreaddons-dev kf6-kcoreaddons-dev```
+Pour les dérivés d'Ubuntu, la compilation nécessite l'installation de paquets : 
+```
+sudo apt install cmake build-essential kf6-kio-dev kf6-kcoreaddons-dev kf6-kcoreaddons-dev
+```
 
 Télécharger le contenu du git.
 
-Une fois dans le dossier contenat les fichiers du git, le plus simple est de procéder ainsi :
+Une fois dans le dossier contenant les fichiers du git, le plus simple est de procéder ainsi :
 ```
 mkdir builddir
 cd builddir
@@ -39,14 +41,14 @@ Avec le paquet **checkinstall**, il est possible de remplacer `sudo make install
 #### Depuis le binaire :
 Extraire le binaire du fichier tar.gz : **https://github.com/Hizoka76/keneric_qt6/releases/latest**.
 
-Déplacer le fichier .so dans le dossier **/usr/lib/x86_64-linux-gnu/qt6/plugins/kf6/thumbcreator**.
+Déplacer le fichier **keneric.so** dans le dossier **/usr/lib/x86_64-linux-gnu/qt6/plugins/kf6/thumbcreator**.
 
 
 ### Principe de fonctionnement :
 #### Fichiers desktop (dépréciés) :
-Ces fichiers qui seravaient à ajouter des liens entre **keneric.so** et **Dolphin** ne fonctionnent plus avec KDE6.
+Ces fichiers qui servaient à ajouter des liens entre **keneric.so** et **Dolphin** ne fonctionnent plus avec KDE6.
 
-Il n'est malheureusement plus aussi facile de créer des liens dans Dolphin.
+Il n'est malheureusement plus aussi facile de créer des liens dans **Dolphin**.
 Les mimetypes sont maintenant définis dans le fichier **kenericthumbnail.json** qui doit être recompilé après modification.
 
 Il serait envisageable de n'utiliser que keneric en indiquant un mimetype //application/octet-stream// (qui semble remplacer //all/all-files//).
@@ -54,7 +56,7 @@ Il faudrait alors gérer les différents mimetypes dans des sous-scripts keneric
 
 #### Fichier keneric.so :
 **Dolphin** va l'utiliser pour générer une vignette.
-**keneric.so** appelle le script **keneric** en lui fournissant des arguments et attent que celui-ci lui rende la main.
+**keneric.so** appelle le script **keneric** en lui fournissant des arguments et attend que celui-ci lui rende la main.
 
 Les arguments passés au script sont :
  - L'adresse du fichier attendant une vignette.
@@ -108,7 +110,7 @@ Les fichiers desktop ont été modifiés pour s'adapter à KDE6.
 Il est **impératif** de rendre ces fichiers exécutables.
 Ces fichiers doivent maintenant être placés dans le dossier **.local/share/kio/servicemenus/** (//ou /usr/share/kio/servicemenus//).
 
-Des services en liens sont égalements proposés :
+Des services en liens sont également proposés :
  - Le [dossier KenericHashFile](KenericHashFile) propose de copier le hash d'un élément.
  - Le [dossier KenericRemoveThumbnails](KenericRemoveThumbnails) propose de supprimer les vignettes d'éléments.
  - Le [dossier KenericCustomIcon](KenericCustomIcon) propose de facilité l'utilisation de vignettes personnalisées.
