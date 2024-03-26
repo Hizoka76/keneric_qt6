@@ -1,0 +1,12 @@
+[Desktop Entry]
+Type=Service
+MimeType=application/octet-stream;inode/directory;
+Actions=keneric-delete-custom-icon;
+TryExec=keneric-delete-custom-icon
+X-KDE-Submenu=Keneric Actions
+
+[Desktop Action keneric-delete-custom-icon]
+Name=Remove the custom thumbnail link
+Name[fr]=Supprimer le lien de la vignette personnalisée
+Icon=remove-link
+Exec=keneric-delete-custom-icon %U
