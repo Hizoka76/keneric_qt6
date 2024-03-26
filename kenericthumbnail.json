@@ -1,0 +1,13 @@
+{
+    "CacheThumbnail": true,
+    "KPlugin": {
+        "MimeTypes": [
+            "video/*",
+            "inode/directory"
+        ],
+        "Name": "Files supported by Keneric (videos, directory)",
+        "Name[fr]": "Fichiers pris en charge par Keneric (videos, dossiers)"
+    },
+    "MimeType": "video/*;inode/directory;"
+}
+

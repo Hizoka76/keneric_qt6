@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component type="addon">
+  <id>org.kde.keneric</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-2.0+</project_license>
+  <extends>org.kde.dolphin.desktop</extends>
+  <extends>org.kde.konqueror.desktop</extends>
+  <extends>org.kde.krusader.desktop</extends>
+  <extends>org.kde.gwenview.desktop</extends>
+  <name>keneric</name>
+  <name xml:lang="fr">keneric</name>
+  <summary>Graphics file format thumbnailers for KDE applications</summary>
+  <summary xml:lang="fr">Créateurs de vignettes de fichiers au format graphique pour les applications KDE</summary>
+  <description>
+    <p>These plugins allow KDE software to display thumbnails for PostScript, RAW, Mobipocket, and Blender files.</p>
+    <p xml:lang="fr">Ces modules externes permettent aux logiciels de KDE de créer des vignettes pour les formats de fichiers définis par l'utilisateur.</p>
+  </description>
+  <url type="homepage">https://www.kde.org</url>
+  <url type="bugtracker">https://bugs.kde.org/</url>
+  <screenshots>
+    <screenshot type="default">
+      <image>https://cdn.kde.org/screenshots/kdegraphics-thumbnailers/kdegraphics-thumbnailers.png</image>
+      <caption>Dolphin with PostScript thumbnail</caption>
+      <caption xml:lang="fr">Dolphin avec une vignette PostScript</caption>
+    </screenshot>
+  </screenshots>
+  <project_group>KDE</project_group>
+  <categories>
+    <category>Graphics</category>
+  </categories>
+  <icon type="stock">application-postscript</icon>
+</component>
