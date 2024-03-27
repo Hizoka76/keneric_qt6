@@ -29,11 +29,9 @@ Donc, pour un fichier avec un mimetype **video/x-matroska** :
  - Keneric recherche des sous-scripts commençants par **keneric-video-x-matroska**.
     - S'il y en a : keneric-video-x-matroska-**001**-mkv-cover sera chargé avant keneric-video-x-matroska-**010**-mkv-other.
     - Si un sous-script crée la vignette attendue, le script s’arrêtera.
-
  - Si la vignette n'est toujours pas créée, keneric recherche des sous-scripts commençants par **keneric-x-matroska**.
     - S'il y en a : keneric-x-matroska-**001**-mkv-cover sera chargé avant keneric-x-matroska-**010**-mkv-other.
     - Si un sous-script crée la vignette attendue, le script s’arrêtera.
-
  - Si la vignette n'est toujours pas créée, keneric recherche des sous-scripts commençants par **keneric-video**.
     - S'il y en a : keneric-video-**001**-mkv-cover sera chargé avant keneric-video-**010**-mkv-other.
     - Si un sous-script crée la vignette attendue, le script s’arrêtera.
@@ -51,19 +49,19 @@ Dans le cas des fichiers matroska (mkv) :
 
 ### Fonctionnement des sous-scripts :
 Ils peuvent utiliser les fonctions partagées suivantes :
-    **Dependencies** : À utiliser pour vérifier des dépendances avant d'utiliser les commandes liées.
-    **SearchInFolder** : Utile pour la recherche d'un fichier dans un dossier
-    **LogFileMessage** : Fonction d'envoi de message au fichier log s'il est actif.
-        Ex de message : **LogFileMessage** "NoKeneric file found : ${Image}"
-        Ex de message d'erreur : convert ...  **|& LogFileMessage**
+ - **Dependencies** : À utiliser pour vérifier des dépendances avant d'utiliser les commandes liées.
+ - **SearchInFolder** : Utile pour la recherche d'un fichier dans un dossier
+ - **LogFileMessage** : Fonction d'envoi de message au fichier log s'il est actif.
+   - Ex de message : **LogFileMessage** "NoKeneric file found : ${Image}"
+   - Ex de message d'erreur : convert ...  **|& LogFileMessage**
 
 Ils peuvent utiliser les variables globales :
-    **FullName** : Adresse du fichier/dossier.
-    **MimeType** : Mimetype du fichier/dossier.
-    **ExportPicture** : Adresse de la vignette du fichier/dossier qui sera reprise par keneric.
-    **Thumb** : Nom de la vignette attendue
-    **ExecFolder** : Dossier du script keneric.
-    **LogRedirection** : Sorite des retours des messages log.
+ - **FullName** : Adresse du fichier/dossier.
+ - **MimeType** : Mimetype du fichier/dossier.
+ - **ExportPicture** : Adresse de la vignette du fichier/dossier qui sera reprise par keneric.
+ - **Thumb** : Nom de la vignette attendue
+ - **ExecFolder** : Dossier du script keneric.
+ - **LogRedirection** : Sorite des retours des messages log.
 
 Toujours déclarer les variables (avec leurs valeurs par défaut) avant de les tester afin d'éviter qu'un précédent sous-script ait créé des variables portant le même nom.
 
@@ -100,11 +98,9 @@ So, for a file with mimetype video/x-matroska :
  - Keneric searches for sub-scripts starting with **keneric-video-x-matroska**.
     - If there are any: keneric-video-x-matroska-**001**-mkv-cover will be loaded before keneric-video-x-matroska-**010**-mkv-other.
     - If a sub-script creates the expected thumbnail, the script will stop.
-
  - If the thumbnail is still not created, keneric searches for sub-scripts starting with **keneric-x-matroska**.
     - If there are any, keneric-x-matroska-**001**-mkv-cover will be loaded before keneric-x-matroska-**010**-mkv-other.
     - If a sub-script creates the expected thumbnail, the script will stop.
-
  - If the thumbnail is still not created, keneric searches for sub-scripts starting with **keneric-video**.
     - If there are any, keneric-video-**001**-mkv-cover will be loaded before keneric-video-**010**-mkv-other.
     - If a sub-script creates the expected thumbnail, the script will stop.
@@ -122,19 +118,19 @@ In the case of matroska (mkv) files:
 
 ### Sub-scripts explanation:
 They can use shared functions:
-    **Dependencies**: Use to check dependencies before using linked commands.
-    **SearchInFolder**: Useful for searching for a file in a folder.
-    **LogFileMessage**: Sends a message to the log file if it is active.
-        Example message: **LogFileMessage** "NoKeneric file found: ${Image}".
-        Example of error message: convert ...  **|& LogFileMessage**
+ - **Dependencies**: Use to check dependencies before using linked commands.
+ - **SearchInFolder**: Useful for searching for a file in a folder.
+ - **LogFileMessage**: Sends a message to the log file if it is active.
+    - Example message: **LogFileMessage** "NoKeneric file found: ${Image}".
+    - Example of error message: convert ...  **|& LogFileMessage**
 
 They can use the global variables :
-    **FullName**: File/folder address.
-    **MimeType**: Mimetype of the file/folder.
-    **ExportPicture**: Address of the file/folder thumbnail to be exported by keneric.
-    **Thumb**: Name of the expected thumbnail.
-    **ExecFolder**: Folder of the keneric script.
-    **LogRedirection**: Output of log message returns.
+ - **FullName**: File/folder address.
+ - **MimeType**: Mimetype of the file/folder.
+ - **ExportPicture**: Address of the file/folder thumbnail to be exported by keneric.
+ - **Thumb**: Name of the expected thumbnail.
+ - **ExecFolder**: Folder of the keneric script.
+ - **LogRedirection**: Output of log message returns.
 
 Always declare variables (with their default values) before testing them, to avoid a previous script having created variables with the same name.
 
