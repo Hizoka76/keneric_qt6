@@ -10,7 +10,7 @@ De nombreuses choses ont évoluées entre KDE5 et KDE6.
 ### Description :
 keneric est un générateur de vignettes pour plasma KDE6 qui utilise un script (bash ou python) pour créer ces vignettes.
 
-L'idée du de base a été créé par Rog131 <samrog131@hotmail.com> mais le fonctionnement a grandement évolué.
+L'idée du de base a été créé par <a href="mailto:samrog131@hotmail.com">Rog131</a> mais le fonctionnement a grandement évolué.
 
 
 ### Installation :
@@ -29,7 +29,7 @@ cd builddir
 cmake ..
 sudo make install
 ```
-Les fichiers suivant sont générés :
+Les fichiers suivant sont générés : 
  - **/usr/lib/x86_64-linux-gnu/qt6/plugins/kf6/thumbcreator/keneric.so**
  - **/usr/share/metainfo/org.kde.keneric.metainfo.xml**
 
@@ -99,7 +99,7 @@ Many things have evolved between KDE5 and KDE6.
 ### Description:
 keneric is a thumbnail generator for KDE6 plasma that uses a script (bash or python) to create these thumbnails.
 
-The basic idea was created by Rog131 <samrog131@hotmail.com> but the operation has greatly evolved.
+The basic idea was created by <a href="mailto:samrog131@hotmail.com">Rog131</a> but the operation has greatly evolved.
 
 
 ### Installation:
