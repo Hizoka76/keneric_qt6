@@ -41,6 +41,12 @@ Extraire le binaire du fichier tar.gz : **https://github.com/Hizoka76/keneric_qt
 Déplacer le fichier **keneric.so** dans le dossier **/usr/lib/x86_64-linux-gnu/qt6/plugins/kf6/thumbcreator**.
 
 
+### Activation :
+Une fois le fichier **keneric.so** installé, cela ajoute une ligne (dont le texte est défini dans le fichier **kenericthumbnail.json**) dans **Dolphin** :
+
+![Image de configuration de keneric dans Dolphin](/readme_img/EnableKenericInDolphinFr.png)
+
+
 ### Principe de fonctionnement :
 #### Fichiers desktop (dépréciés) :
 Ces fichiers qui servaient à ajouter des liens entre **keneric.so** et **Dolphin** ne fonctionnent plus avec KDE6.
@@ -130,6 +136,11 @@ Extract the binary from the tar.gz file: **https://github.com/Hizoka76/keneric_q
 
 Move file **keneric.so** to folder **/usr/lib/x86_64-linux-gnu/qt6/plugins/kf6/thumbcreator**.
 
+
+### Activation:
+Once the **keneric.so** file is installed, this adds a line (whose text is defined in the **kenericthumbnail.json** file) to **Dolphin**:
+
+![keneric configuration image in Dolphin](/readme_img/EnableKenericInDolphinEn.png)
 
 ### How it works :
 #### Desktop files (deprecated):
