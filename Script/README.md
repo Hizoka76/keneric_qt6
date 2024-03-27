@@ -5,17 +5,17 @@ Proposition d'un script **keneric** qui gérera les vignettes des vidéos, des m
 Ce script **keneric** source des sous-scripts pour faciliter son utilisation.
 
 Voici ce que cela peut donner :
+
 Pour les dossiers :
-![Screenshot d'exemples de vignettes pour les dossiers.](/readme_img/ScriptKenericDirectoryEg.png)
+
+<img src="https://github.com/Hizoka76/keneric_qt6/blob/main/readme_img/ScriptKenericDirectoryEg.png" width="220" height="800">
 
 Pour les fichiers matroska (mkv) :
+
 ![Screenshot d'exemples de vignettes pour les fichier matroska.](/readme_img/VideoMatroskaCover.png)
 
 ### Fonctionnement :
-Tous les scripts doivent être dans un dossier du path.
-```
-echo $PATH
-```
+Tous les scripts doivent être dans un dossier du path : `echo $PATH`
 
 Les sous-scripts doivent être nommés en se basant sur le mimetype qu'ils traitent afin d'être correctement sourcés :
  - Avec un sous-script traitant les **video/x-matroska** : keneric-video-x-matroska-[0-9][0-9][0-9]-nom_script
@@ -24,27 +24,32 @@ Les sous-scripts doivent être nommés en se basant sur le mimetype qu'ils trait
 
 Ils seront chargés dans l'ordre de la 1ere partie du mimetype puis par ci-dessus puis par nom, d'où l'intérêt des [0-9][0-9][0-9] qui permettent de les prioriser.
 
+#### Ordre théorique :
 Donc, pour un fichier avec un mimetype **video/x-matroska** :
-  Keneric recherche des sous-scripts commençants par **keneric-video-x-matroska**.
-    S'il y en a : keneric-video-x-matroska-**001**-mkv-cover sera chargé avant keneric-video-x-matroska-**010**-mkv-other.
-      Si un sous-script crée la vignette attendue, le script s’arrêtera.
+ - Keneric recherche des sous-scripts commençants par **keneric-video-x-matroska**.
+    - S'il y en a : keneric-video-x-matroska-**001**-mkv-cover sera chargé avant keneric-video-x-matroska-**010**-mkv-other.
+    - Si un sous-script crée la vignette attendue, le script s’arrêtera.
 
-  Si la vignette n'est toujours pas créée, keneric recherche des sous-scripts commençants par **keneric-x-matroska**.
-    S'il y en a : keneric-x-matroska-**001**-mkv-cover sera chargé avant keneric-x-matroska-**010**-mkv-other.
-      Si un sous-script crée la vignette attendue, le script s’arrêtera.
+ - Si la vignette n'est toujours pas créée, keneric recherche des sous-scripts commençants par **keneric-x-matroska**.
+    - S'il y en a : keneric-x-matroska-**001**-mkv-cover sera chargé avant keneric-x-matroska-**010**-mkv-other.
+    - Si un sous-script crée la vignette attendue, le script s’arrêtera.
 
-  Si la vignette n'est toujours pas créée, keneric recherche des sous-scripts commençants par **keneric-video**.
-    S'il y en a : keneric-video-**001**-mkv-cover sera chargé avant keneric-video-**010**-mkv-other.
-      Si un sous-script crée la vignette attendue, le script s’arrêtera.
+ - Si la vignette n'est toujours pas créée, keneric recherche des sous-scripts commençants par **keneric-video**.
+    - S'il y en a : keneric-video-**001**-mkv-cover sera chargé avant keneric-video-**010**-mkv-other.
+    - Si un sous-script crée la vignette attendue, le script s’arrêtera.
 
-Exemple concret, dans les sous scripts proposés pour la gestion des dossiers, l'ordre sera donc :
+#### Ordre concret :
+Dans les sous scripts proposés pour la gestion des dossiers, l'ordre sera donc :
  - keneric-directory-001-nokeneric : Recherche un fichier noKeneric dans le dossier.
  - keneric-directory-010-disk : Recherche un fichier disk dans le dossier.
  - keneric-directory-020-full : Recherche un fichier full dans le dossier.
  - keneric-directory-030-cover : Recherche un fichier cover dans le dossier.
 
+Dans le cas des fichiers matroska (mkv) :
+ - keneric-x-matroska-010-mkv-cover : Traitement spécifique aux fichiers mkv.
+ - keneric-video-999-all : Traitement pour toutes les vidéos.
 
-### Explications des sous-scripts :
+### Fonctionnement des sous-scripts :
 Ils peuvent utiliser les fonctions partagées suivantes :
     **Dependencies** : À utiliser pour vérifier des dépendances avant d'utiliser les commandes liées.
     **SearchInFolder** : Utile pour la recherche d'un fichier dans un dossier
@@ -71,17 +76,17 @@ Proposal for a **keneric** script to manage thumbnails for videos, mkv and folde
 This **keneric** script sources sub-scripts to facilitate its use.
 
 Here's how it looks:
+
 For folders :
-![Screenshot of sample thumbnails for folders](/readme_img/ScriptKenericDirectoryEg.png)
+
+<img src="https://github.com/Hizoka76/keneric_qt6/blob/main/readme_img/ScriptKenericDirectoryEg.png" width="220" height="800">
 
 For matroska files (mkv) :
+
 ![Screenshot of sample thumbnails for matroska files](/readme_img/VideoMatroskaCover.png)
 
 ### Introducing :
-All scripts must be in a path folder.
-```
-echo $PATH
-```
+All scripts must be in a path folder: `echo $PATH`
 
 Sub-scripts must be named according to the mimetype they process, in order to be correctly sourced:
  - With sub-script processing **video/x-matroska**: keneric-video-x-matroska-[0-9][0-9][0-9]-script_name
@@ -90,24 +95,30 @@ Sub-scripts must be named according to the mimetype they process, in order to be
 
 They will be loaded in the above order, then by name, which is why [0-9][0-9][0-9] is useful for prioritizing them.
 
+#### Theoric order :
 So, for a file with mimetype video/x-matroska :
-  Keneric searches for sub-scripts starting with **keneric-video-x-matroska**.
-    If there are any: keneric-video-x-matroska-**001**-mkv-cover will be loaded before keneric-video-x-matroska-**010**-mkv-other.
-      If a sub-script creates the expected thumbnail, the script will stop.
+ - Keneric searches for sub-scripts starting with **keneric-video-x-matroska**.
+    - If there are any: keneric-video-x-matroska-**001**-mkv-cover will be loaded before keneric-video-x-matroska-**010**-mkv-other.
+    - If a sub-script creates the expected thumbnail, the script will stop.
 
-  If the thumbnail is still not created, keneric searches for sub-scripts starting with **keneric-x-matroska**.
-    If there are any, keneric-x-matroska-**001**-mkv-cover will be loaded before keneric-x-matroska-**010**-mkv-other.
-      If a sub-script creates the expected thumbnail, the script will stop.
+ - If the thumbnail is still not created, keneric searches for sub-scripts starting with **keneric-x-matroska**.
+    - If there are any, keneric-x-matroska-**001**-mkv-cover will be loaded before keneric-x-matroska-**010**-mkv-other.
+    - If a sub-script creates the expected thumbnail, the script will stop.
 
-  If the thumbnail is still not created, keneric searches for sub-scripts starting with **keneric-video**.
-    If there are any, keneric-video-**001**-mkv-cover will be loaded before keneric-video-**010**-mkv-other.
-      If a sub-script creates the expected thumbnail, the script will stop.
+ - If the thumbnail is still not created, keneric searches for sub-scripts starting with **keneric-video**.
+    - If there are any, keneric-video-**001**-mkv-cover will be loaded before keneric-video-**010**-mkv-other.
+    - If a sub-script creates the expected thumbnail, the script will stop.
 
+#### Realistic order :
 For example, in the sub-scripts proposed for folder management, the order will be:
  - keneric-directory-001-nokeneric: Searches for a noKeneric file in the folder.
  - keneric-directory-010-disk: Searches for a disk file in the folder.
  - keneric-directory-020-full: Search for a full file in the folder.
  - keneric-directory-030-cover: Searches for a cover file in the folder.
+
+In the case of matroska (mkv) files:
+ - keneric-x-matroska-010-mkv-cover: Processing specific to mkv files.
+ - keneric-video-999-all: Processing for all videos.
 
 ### Sub-scripts explanation:
 They can use shared functions:
