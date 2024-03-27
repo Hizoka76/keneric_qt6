@@ -1,7 +1,4 @@
 # keneric
-
-**Documentation en cours de création**
-
 ## Version Française :
 Cette nouvelle version pour KDE6 fait suite à https://github.com/Hizoka76/keneric qui fonctionnait pour KDE5.
 
@@ -73,46 +70,109 @@ Le script **keneric** doit être placé dans un dossier du path, pour voir ces d
 echo "$PATH"
 ```
 
-#### Script bash proposé
+##### Script bash proposé
 Le git propose un script **keneric** gérant les mimetypes *mkv* et *directory*.
 
-Afin de faciliter le développement de nouvelles fonctionnalités, ce script charge des sous-scripts.
-
-##### Scripts sourcés par keneric :
-Toutes les explications sur le fonctionnement des sous-scripts sont dans le [dossier script](scripts).
+Toutes les explications sur son fonctionnement sont dans le [dossier Script](Script).
 
 #### Fichier keneric.conf :
 Fichier présent à l'adresse **~/.config/keneric.conf**.
 Il est utilisé par **keneric.so** et par le script **keneric** proposé.
 
-Toutes les informations sur le fichier sont dans le [dossier config](config)
-
-### Exemples de rendus par le script proposé :
-#### Script Directory-Covert : Il suffit de déposer un fichier "cover" dans le dossier.
-![Directory-Cover](/readme/Directory-Cover.png)
-
-
-#### Script Directory-Disk : Il suffit de déposer un fichier "disk" dans le dossier.
-![Directory-Disk](/readme/Directory-Disk.png)
-
-
-#### Script Directory-Full : Il suffit de déposer un fichier "full" dans le dossier.
-![Directory-Full](/readme/Directory-Full.png)
-
-
-#### Script Video-mkv-Cover : Il suffit que le fichier mkv contienne une image.
-La couleur du contour s'adapte à la résolution de la vidéo et à la 3D.
-![Video-mkv-Cover](/readme/Video-mkv-Cover.png)
+Toutes les informations et exemples de rendus sont dans le [dossier config](config).
 
 
 ### Services :
-Les fichiers desktop ont été modifiés pour s'adapter à KDE6.
-Il est **impératif** de rendre ces fichiers exécutables.
-Ces fichiers doivent maintenant être placés dans le dossier **.local/share/kio/servicemenus/** (//ou /usr/share/kio/servicemenus//).
-__SEPARATOR__ ne fonctionne plus en KDE6.
+Des services menus sont proposés, ils sont en liens avec **keneric.so**.
 
-Des services en liens sont également proposés :
- - Le [dossier KenericHashFile](KenericHashFile) propose de copier le hash d'un élément.
- - Le [dossier KenericRemoveThumbnails](KenericRemoveThumbnails) propose de supprimer les vignettes d'éléments.
- - Le [dossier KenericCustomIcon](KenericCustomIcon) propose de facilité l'utilisation de vignettes personnalisées.
- - Le [dossier KenericDeleteCustomIcon](KenericDeleteCustomIcon) propose de supprimer les vignettes personnalisées.
+Toutes les informations sont dans le [dossier Services](Services).
+
+
+## English version:
+This new version for KDE6 follows on from https://github.com/Hizoka76/keneric, which worked for KDE5.
+
+The operation of keneric and its makefile had to be modified to make it compatible with KDE6.
+
+Many things have evolved between KDE5 and KDE6.
+
+
+### Description:
+keneric is a thumbnail generator for KDE6 plasma that uses a script (bash or python) to create these thumbnails.
+
+The basic idea was created by Rog131 <samrog131@hotmail.com> but the operation has greatly evolved.
+
+
+### Installation:
+#### From source:
+For Ubuntu derivatives, compilation requires the installation of : 
+```
+sudo apt install cmake build-essential kf6-kio-dev kf6-kcoreaddons-dev kf6-kcoreaddons-dev
+```
+
+Download the git contents.
+
+Once in the folder containing the git files, the easiest way is to proceed as follows:
+```
+mkdir builddir
+cd builddir
+cmake .
+sudo make install
+```
+
+The following files are generated:
+ - **/usr/lib/x86_64-linux-gnu/qt6/plugins/kf6/thumbcreator/keneric.so**
+ - **/usr/share/metainfo/org.kde.keneric.metainfo.xml**
+
+With the **checkinstall** package, you can replace `sudo make install` with `sudo checkinstall` to generate a deb file.
+
+#### From the binary :
+Extract the binary from the tar.gz file: **https://github.com/Hizoka76/keneric_qt6/releases/latest**.
+
+Move file **keneric.so** to folder **/usr/lib/x86_64-linux-gnu/qt6/plugins/kf6/thumbcreator**.
+
+
+### How it works :
+#### Desktop files (deprecated):
+These files, which were used to add links between **keneric.so** and **Dolphin**, no longer work with KDE6.
+
+Unfortunately, it is no longer as easy to create links in **Dolphin**.
+Mimetypes are now defined in **kenericthumbnail.json**, which must be recompiled after modification.
+
+It would be possible to use keneric only, specifying an *application/octet-stream* mimetype (which seems to replace *all/all-files*).
+The different mimetypes would then have to be managed in keneric sub-scripts.
+
+#### keneric.so file:
+**Dolphin** will use it to generate a thumbnail.
+**keneric.so** calls the **keneric** script, providing it with arguments and waiting for it to hand over.
+
+The arguments passed to the script are :
+ - The address of the file waiting for a thumbnail.
+ - The mimetype of this file.
+ - The URL of the temporary thumbnail (*/tmp/keneric/...*) to be loaded by **keneric.so**.
+
+**keneric.so** will load this temporary thumbnail and, if valid, provide it to **Dolphin** for display.
+
+#### Script keneric :
+This script is called by **keneric.so** and does not contain an extension so that it can be used with several languages such as **bash** or **python**.
+
+The **keneric** script must be placed in a path folder, to view these folders :
+```
+echo "$PATH"
+```
+
+##### Proposed bash script
+Git offers a **keneric** script that manages *mkv* and *directory* mimetypes.
+
+Full details of how it works can be found in the [Script folder](Script).
+
+#### keneric.conf file:
+File located at **~/.config/keneric.conf**.
+It is used by **keneric.so** and by the proposed **keneric** script.
+
+All information and examples of rendering are in the [config folder](config).
+
+
+### Services :
+Menu services are available, linked to **keneric.so**.
+
+All information is in the [Services folder](Services).
