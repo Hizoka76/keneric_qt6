@@ -46,6 +46,10 @@ Une fois le fichier **keneric.so** installé, cela ajoute une ligne (dont le tex
 
 ![Image de configuration de keneric dans Dolphin](/readme_img/EnableKenericInDolphinFr.png)
 
+Attention à désactiver les potentiels autres générateurs de vignettes qui pourraient entrer en concurrence.
+
+Dans le cas du script **keneric** proposé, il faut décocher ffmpegthumbnailers si présent et de celui des dossiers.
+
 
 ### Principe de fonctionnement :
 #### Fichiers desktop (dépréciés) :
@@ -141,6 +145,10 @@ Move file **keneric.so** to folder **/usr/lib/x86_64-linux-gnu/qt6/plugins/kf6/t
 Once the **keneric.so** file is installed, this adds a line (whose text is defined in the **kenericthumbnail.json** file) to **Dolphin**:
 
 ![keneric configuration image in Dolphin](/readme_img/EnableKenericInDolphinEn.png)
+
+Be careful to deactivate any other thumbnail generators that may compete with you.
+
+In the case of the **keneric** script, uncheck ffmpegthumbnailers if present, and uncheck ffmpegthumbnailers for folders.
 
 ### How it works :
 #### Desktop files (deprecated):
