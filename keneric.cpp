@@ -16,34 +16,25 @@
 
 // https://specifications.freedesktop.org/thumbnail-spec/thumbnail-spec-latest.html
 
-//    keneric can use a conf file now (~/.config/keneric.conf).
-//    The file can contains:
-//      The folders authorized:
-//          foldersAuthorized=folder1, folder2...
-//
-//      The folders prohibited:
-//          foldersProhibited=folder1, folder2...
-//
-//      The icon to use for files with their md5 hash:
-//          d06329310e5224bf069270f88cee59ad=IconURL_1
-//          855abd06329598745624bf0699270654=IconURL_2
-//          ...
-//
-//    If foldersAuthorized and foldersProhibited are used,
-//    the file needs to be in foldersAuthorized but not in foldersProhibited.
 
+// v24-04-06 by Terence Belleguic
+//  Added: DebugMode
+
+// v24-04-04 by Terence Belleguic
+//  Updated: Config file patched
+//  Added: separate pathURL and pathURLWithFile
 
 // 2024/03/24 - v0.8 by Terence Belleguic
-//  Replace ThumbCreator with ThumbnailRequest for Qt6
+//  Updated: Replace ThumbCreator with ThumbnailRequest for Qt6
 
 // 2023/12/09 - v0.7 by Terence Belleguic
-//  Add path command : ~/.local/bin/
+//  Added and removed: Add path command : ~/.local/bin/
 
 // 2023/12/09 - v0.6 by Terence Belleguic
-//  log file created in tmp folder.
+//  Added and removed: Log file created in tmp folder.
 
 // 2022/01/23 - v0.5 by Terence Belleguic
-//  Load of the thumbnail if exists.
+//  Added: Load of the thumbnail if exists.
 
 // 2022/01/18 - v0.4 by Terence Belleguic
 //  Added: Use of a conf file.
@@ -69,6 +60,7 @@
 
 #include <KPluginFactory>
 
+
 K_PLUGIN_CLASS_WITH_JSON(Keneric, "kenericthumbnail.json")
 
 Keneric::Keneric(QObject *parent, const QVariantList &args)
@@ -81,20 +73,47 @@ Keneric::~Keneric()
 }
 
 
+// Fonction de création et de mise à jour du fichier log
+void writeToLogFile(const QStringList &content) {
+    // Fichier log
+    QFile logFile(QStringLiteral("/tmp/KenericCpp.log"));
+
+    // Ouverture du fichier en mode ajout
+    if (logFile.open(QIODevice::Append | QIODevice::Text)) {
+        QTextStream stream(&logFile);
+
+        stream << QStringLiteral("\n-------\n");
+
+        // Ajout des éléments 1 à 1 dans le stream
+        for (const QString &element : content) {
+            stream << element;
+        }
+
+        // Fermeture du fichier
+        logFile.close();
+    }
+}
+
 
 KIO::ThumbnailResult Keneric::create(const KIO::ThumbnailRequest &request)
 {
+    // Fichier Log
+    bool debugMode = false;
+    QStringList debugContent;
+
     // Fichier pour lequel il faut une vignette
     QString path = request.url().toLocalFile();
-    QUrl pathURL(QStringLiteral("file://"));
-    pathURL.setPath(path);
+    QUrl pathURL(path);
+    QUrl pathURLWithFile(QStringLiteral("file://"));
+    pathURLWithFile.setPath(path);
 
     // Récupération du mime type de l'élément
     QMimeDatabase db;
     QMimeType mime = db.mimeTypeForFile(path);
+    QStringList mimeInfos = mime.name().split(QLatin1Char('/'));
 
     // Encodage de l'adresse
-    QByteArray pathURI = pathURL.toEncoded();
+    QByteArray pathURI = pathURLWithFile.toEncoded();
 
     // Hash de l'URI qui sera utilisé par le système
     QByteArray hashData = QCryptographicHash::hash(pathURI, QCryptographicHash::Md5);
@@ -114,7 +133,8 @@ KIO::ThumbnailResult Keneric::create(const KIO::ThumbnailRequest &request)
         QImage img = reader.read();
 
         // Vérifier si le chargement a réussi
-        if (! img.isNull()) {
+        if (! img.isNull())
+        {
             // Le chargement a réussi, renvoyer l'image chargée
             return KIO::ThumbnailResult::pass(img);
         }
@@ -130,14 +150,39 @@ KIO::ThumbnailResult Keneric::create(const KIO::ThumbnailRequest &request)
         // Chargement du fichier de config qui est créé si besoin
         QSettings settingsValues(settingsFile, QSettings::NativeFormat);
 
+        // Mode debug, vu que l'info est dans general, il ne faut pas préciser le groupe'
+        if (settingsValues.contains(QStringLiteral("debugMode")))
+        {
+            debugMode = settingsValues.value(QStringLiteral("debugMode")).toBool();
+        }
+
+        // Texte de debug
+        if (debugMode)
+        {
+            debugContent << QStringLiteral("File : ") << path << QStringLiteral("\n");
+            debugContent << QStringLiteral("File Mimetype : ") << mime.name() << QStringLiteral("\n");
+        }
+
         // Si le md5Hash est présent dans le groupe icons du fichier de config
         if (settingsValues.contains(QStringLiteral("icons/") + md5Hash))
         {
+            // Texte de debug
+            if (debugMode)
+            {
+                debugContent << QStringLiteral("File have its md5Hash in icons group : ") << QStringLiteral("icons/") + md5Hash << QStringLiteral("\n");
+            }
+
             // Adresse de l'image
             QString imageURL = settingsValues.value(QStringLiteral("icons/") + md5Hash).toString();
 
             if (QFile::exists(imageURL))
             {
+                // Texte de debug
+                if (debugMode)
+                {
+                    debugContent << QStringLiteral("ImageURL exists for this icon.") << imageURL << QStringLiteral("\n");
+                }
+
                 // Chargement de l'image temporaire en mémoire
                 QImage previewImage(imageURL);
 
@@ -147,16 +192,43 @@ KIO::ThumbnailResult Keneric::create(const KIO::ThumbnailRequest &request)
                 // Ne valide que si l'image n'est pas vide
                 if (!img.isNull())
                 {
+                    // Texte de debug
+                    if (debugMode)
+                    {
+                        debugContent << QStringLiteral("ImageURL is not null, end") << QStringLiteral("\n");
+                        writeToLogFile(debugContent);
+                    }
+
                     return KIO::ThumbnailResult::pass(img);
                 }
+
+                // Texte de debug
+                else if (debugMode)
+                {
+                    debugContent << QStringLiteral("ImageURL is null") << QStringLiteral("\n");
+                }
+            }
+
+            // Texte de debug
+            else if (debugMode)
+            {
+                debugContent << QStringLiteral("ImageURL doesn't exists for this icon.") << imageURL << QStringLiteral("\n");
             }
         }
 
         // Liste des groupes
         QStringList settingsGroups = settingsValues.childGroups();
 
-        // Infos du mimetype
-        QStringList mimeInfos = mime.name().split(QLatin1Char('/'));
+        // Texte de debug
+        if (debugMode)
+        {
+            debugContent << QStringLiteral("Group of the settings file : ") << QStringLiteral("\n");
+
+            for (const QString &settingsGroup : settingsGroups)
+            {
+                debugContent << QStringLiteral(" - ") << settingsGroup << QStringLiteral("\n");
+            }
+        }
 
         // Liste mimetype, grouptype, all
         QStringList groupNames;
@@ -166,7 +238,11 @@ KIO::ThumbnailResult Keneric::create(const KIO::ThumbnailRequest &request)
         QStringList variableNames;
         variableNames << QStringLiteral("itemsAuthorized") << QStringLiteral("itemsProhibited");
 
+        // Variable pour simplifier l'utilisation du / par la suite
         QString slash = QStringLiteral("/");
+
+        // Variable donnant le dessus de itemsAuthorized sur itemsProhibited
+        bool ItemAuthorized = false;
 
         for (const QString &groupName : groupNames)
         {
@@ -174,6 +250,12 @@ KIO::ThumbnailResult Keneric::create(const KIO::ThumbnailRequest &request)
             if (! settingsGroups.contains(groupName))
             {
                 continue;
+            }
+
+            // Texte de debug
+            if (debugMode)
+            {
+                debugContent << QStringLiteral("The group name exists in the settings file : ") << groupName << QStringLiteral("\n");
             }
 
             // Si le groupe est présent
@@ -187,13 +269,27 @@ KIO::ThumbnailResult Keneric::create(const KIO::ThumbnailRequest &request)
 
                 // Liste des dossiers
                 QStringList folders;
+
                 if (settingsValues.value(groupName + slash + variableName).metaType().id() == QMetaType::QStringList)
                 {
                     folders = settingsValues.value(groupName + slash + variableName).toStringList();
                 }
+
                 else if (settingsValues.value(groupName + slash + variableName).metaType().id() == QMetaType::QString)
                 {
                     folders << settingsValues.value(groupName + slash + variableName).toString();
+                }
+
+                // Texte de debug
+                if (debugMode)
+                {
+                    debugContent << QStringLiteral("The key exists in the settings file : ") << groupName + slash + variableName << QStringLiteral("\n");
+                    debugContent << QStringLiteral("Folders : ") << QStringLiteral("\n");
+
+                    for (const QString &folder : folders)
+                    {
+                        debugContent << QStringLiteral(" - ") << folder << QStringLiteral("\n");
+                    }
                 }
 
                 // S'il y a la clé itemsAuthorized
@@ -202,14 +298,21 @@ KIO::ThumbnailResult Keneric::create(const KIO::ThumbnailRequest &request)
                     // Variable bloquante
                     bool Stop = true;
 
-                    // Pour chaque dossier à ne pas scanner / pour chaque valeur de la clé
+                    // Pour chaque dossier à scanner / pour chaque valeur de la clé
                     for (const QString &folder : folders)
                     {
                         // Débloque la variable si l'élément travaillé est l'enfant de l'élément ou est l'élément lui-même
                         QUrl folderURL(folder);
                         if (folderURL.isParentOf(pathURL) || folderURL == pathURL)
                         {
+                            // Texte de debug
+                            if (debugMode)
+                            {
+                                debugContent << QStringLiteral("This file is authorized") << QStringLiteral("\n");
+                            }
+
                             Stop = false;
+                            ItemAuthorized = true;
                             break;
                         }
                     }
@@ -217,6 +320,13 @@ KIO::ThumbnailResult Keneric::create(const KIO::ThumbnailRequest &request)
                     // Arrêt de la fonction si l'élément n'est pas autorisé
                     if (Stop)
                     {
+                        // Texte de debug
+                        if (debugMode)
+                        {
+                            debugContent << QStringLiteral("This file is not authorized, end") << QStringLiteral("\n");
+                            writeToLogFile(debugContent);
+                        }
+
                         return KIO::ThumbnailResult::fail();
                     }
                 }
@@ -229,8 +339,15 @@ KIO::ThumbnailResult Keneric::create(const KIO::ThumbnailRequest &request)
                     {
                         // Arrêt de la fonction si l'élément travaillé est l'enfant de l'élément ou l'élément lui-même
                         QUrl folderURL(folder);
-                        if (folderURL.isParentOf(pathURL) || folderURL == pathURL)
+                        if ((folderURL.isParentOf(pathURL) || folderURL == pathURL) && ! ItemAuthorized)
                         {
+                            // Texte de debug
+                            if (debugMode)
+                            {
+                                debugContent << QStringLiteral("This file is prohibited, end") << QStringLiteral("\n");
+                                writeToLogFile(debugContent);
+                            }
+
                             return KIO::ThumbnailResult::fail();
                         }
                     }
@@ -238,7 +355,15 @@ KIO::ThumbnailResult Keneric::create(const KIO::ThumbnailRequest &request)
             }
 
             // Arrêt de la boucle si on avait un groupe correspondant
-            break;
+            if (ItemAuthorized)
+            {
+                // Texte de debug
+                if (debugMode) {
+                    debugContent << QStringLiteral("This file is authorized, break of the loop") << QStringLiteral("\n");
+                }
+
+                break;
+            }
         }
     }
     // CONFIG FILE FIN //
@@ -264,41 +389,64 @@ KIO::ThumbnailResult Keneric::create(const KIO::ThumbnailRequest &request)
     QStringList arguments;
     arguments << path << mime.name() << protoThumbnail;
 
+    // Texte de debug
+    if (debugMode)
+    {
+        debugContent << QStringLiteral("Launch of the keneric script") << QStringLiteral("\n");
+        debugContent << QStringLiteral("Keneric temporary directory : ") << kenericDirectory << QStringLiteral("\n");
+        debugContent << QStringLiteral("Thumb temporary : ") << protoThumbnail << QStringLiteral("\n");
+    }
+
     // Exécution du script avec les arguments puis attente de sa fin d'exécution avec un parent vide
     QProcess startAction;
     startAction.start(program, arguments);
     startAction.waitForFinished();
 
-
-
-    // Récupération de l'environnement actuel
-    //QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
-
-    // Ajout du PATH ~/.local/bin/
-    // QString customPath = QDir::homePath() + "/.local/bin/";
-    //env.insert("PATH", env.value("PATH") + ":" + customPath);
-
-    //QObject *parent = nullptr;
-    //QProcess *startAction = new QProcess(parent);
-    //startAction->setProcessEnvironment(env); // Ajout du path local
-    //startAction->start(program, arguments);
-    //startAction->waitForFinished();
-
-
     // Si le script a bien créé l'image temporaire
     QFile thumbnailFile(protoThumbnail);
     if (thumbnailFile.exists())
     {
-        // Chargement de l'image temporaire en mémoire
-        QImage previewImage(protoThumbnail);
+        // Texte de debug
+        if (debugMode)
+        {
+            debugContent << QStringLiteral("Thumb temporary exists") << QStringLiteral("\n");
+        }
 
-        // Redimensionnement de l'image temporaire chargée en mémoire
-        img = previewImage.scaled(256, 256, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+        // Vérifier si le chargement a réussi
+        if (! img.isNull())
+        {
+            // Chargement de l'image temporaire en mémoire
+            QImage previewImage(protoThumbnail);
 
-        // Suppression de l'image temporaire
-        QFile::remove(protoThumbnail);
+            // Redimensionnement de l'image temporaire chargée en mémoire
+            img = previewImage.scaled(256, 256, Qt::KeepAspectRatio, Qt::SmoothTransformation);
 
-        return KIO::ThumbnailResult::pass(img);
+            // Suppression de l'image temporaire
+            QFile::remove(protoThumbnail);
+
+            // Texte de debug
+            if (debugMode)
+            {
+                debugContent << QStringLiteral("Thumb temporary is not null, end") << QStringLiteral("\n");
+                writeToLogFile(debugContent);
+            }
+
+            return KIO::ThumbnailResult::pass(img);
+        }
+
+        // Texte de debug
+        else if (debugMode)
+        {
+            debugContent << QStringLiteral("Thumb temporary is null, end") << QStringLiteral("\n");
+            writeToLogFile(debugContent);
+        }
+    }
+
+    // Texte de debug
+    else if (debugMode)
+    {
+        debugContent << QStringLiteral("Thumb temporary doesn't exists, end") << QStringLiteral("\n");
+        writeToLogFile(debugContent);
     }
 
     return KIO::ThumbnailResult::fail();
