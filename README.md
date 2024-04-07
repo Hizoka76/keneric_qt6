@@ -17,29 +17,29 @@ L'idée du de base a été créé par <a href="mailto:samrog131@hotmail.com">Rog
 #### Depuis les sources :
 Pour les dérivés d'Ubuntu, la compilation nécessite l'installation de paquets : 
 ```
-sudo apt install cmake build-essential kf6-kio-dev kf6-kcoreaddons-dev kf6-kcoreaddons-dev
+build-essential kf6-kio-dev kf6-kcoreaddons-dev kf6-kcoreaddons-dev cmake extra-cmake-modules
 ```
 
 Télécharger le contenu du git.
 
-Une fois dans le dossier contenant les fichiers du git, le plus simple est de procéder ainsi :
-```
-mkdir builddir
-cd builddir
-cmake ..
-sudo make install
-```
-Les fichiers suivant sont générés : 
- - **/usr/lib/x86_64-linux-gnu/qt6/plugins/kf6/thumbcreator/keneric.so**
- - **/usr/share/metainfo/org.kde.keneric.metainfo.xml**
-
-Avec le paquet **checkinstall**, il est possible de remplacer `sudo make install` par `sudo checkinstall` pour générer un fichier deb.
+Une fois dans le dossier, executer le fichier compile.sh (un script simple) qui permet :
+ - D'installer automatiquement les paquets.
+ - De compiler les sources.
+ - De compiler les sources et d'installer les fichiers :
+   - /usr/lib/x86_64-linux-gnu/qt6/plugins/kf6/thumbcreator/keneric.so
+   - /usr/share/metainfo/org.kde.keneric.metainfo.xml
+ - De compiler les sources, de créer un paquet debian et de l'installer.
+   - Necessite le paquet **checkinstall**.
 
 #### Depuis le binaire :
 Extraire le binaire du fichier tar.gz : **https://github.com/Hizoka76/keneric_qt6/releases/latest**.
 
 Déplacer le fichier **keneric.so** dans le dossier **/usr/lib/x86_64-linux-gnu/qt6/plugins/kf6/thumbcreator**.
 
+#### Depuis les fichier debian :
+2 versions sont proposées :
+ - La version simple qui n'installe que **keneric.so** et **org.kde.keneric.metainfo.xml**.
+ - La version full qui installe également le script keneric proposé ainsi que les services.
 
 ### Activation :
 Une fois le fichier **keneric.so** installé, cela ajoute une ligne (dont le texte est défini dans le fichier **kenericthumbnail.json**) dans **Dolphin** :
@@ -116,30 +116,29 @@ The basic idea was created by <a href="mailto:samrog131@hotmail.com">Rog131</a> 
 #### From source:
 For Ubuntu derivatives, compilation requires the installation of : 
 ```
-sudo apt install cmake build-essential kf6-kio-dev kf6-kcoreaddons-dev kf6-kcoreaddons-dev
+build-essential kf6-kio-dev kf6-kcoreaddons-dev kf6-kcoreaddons-dev cmake extra-cmake-modules
 ```
 
 Download the git contents.
 
-Once in the folder containing the git files, the easiest way is to proceed as follows:
-```
-mkdir builddir
-cd builddir
-cmake .
-sudo make install
-```
-
-The following files are generated:
- - **/usr/lib/x86_64-linux-gnu/qt6/plugins/kf6/thumbcreator/keneric.so**
- - **/usr/share/metainfo/org.kde.keneric.metainfo.xml**
-
-With the **checkinstall** package, you can replace `sudo make install` with `sudo checkinstall` to generate a deb file.
+Once in the folder, run the compile.sh file (a simple script) which allows you to :
+ - Automatically install packages.
+ - Compile the sources.
+ - Compile the sources and install the :
+   - /usr/lib/x86_64-linux-gnu/qt6/plugins/kf6/thumbcreator/keneric.so
+   - /usr/share/metainfo/org.kde.keneric.metainfo.xml
+ - Compile the sources, create a debian package and install it.
+   - Requires **checkinstall** package.
 
 #### From the binary :
 Extract the binary from the tar.gz file: **https://github.com/Hizoka76/keneric_qt6/releases/latest**.
 
 Move file **keneric.so** to folder **/usr/lib/x86_64-linux-gnu/qt6/plugins/kf6/thumbcreator**.
 
+#### From debian files :
+2 versions are available:
+ - The simple version, which installs only **keneric.so** and **org.kde.keneric.metainfo.xml**.
+ - The full version, which also installs the proposed keneric script and services.
 
 ### Activation:
 Once the **keneric.so** file is installed, this adds a line (whose text is defined in the **kenericthumbnail.json** file) to **Dolphin**:
