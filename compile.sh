@@ -1,6 +1,53 @@
 #!/bin/bash
 
-# check : sudo apt-get install build-essential kf6-kio-dev kf6-kcoreaddons-dev kf6-kcoreaddons-dev cmake extra-cmake-modules
+function Packages()
+{
+# Liste des paquets
+DpkgList=$(dpkg -l)
+
+# Installation des paquets
+for Paquet in "${@}"
+do
+    # S'il y a un paquet ou un autre
+    if [[ "${Paquet}" == *"|"* ]]
+    then
+        # Teste chaque paquet
+        for SubPaquet in ${Paquet//|/ }
+        do
+            # Si un paquet est installé, on s'arrête là
+            grep -qE "^ii  ${SubPaquet}[[:space:]]" <<< "${DpkgList}" && return 0
+        done
+    fi
+
+    # Installation du 1er paquet
+    if ! grep -qE "^ii  ${Paquet%%|*}[[:space:]]" <<< "${DpkgList}"
+    then
+        echo -e "${BLEUFONCE}Installation de ${Paquet%%|*}\n${RAZ}"
+        sudo apt-get -qy install ${Paquet%%|*}
+    fi
+done
+
+# Liste des paquets
+DpkgList=$(dpkg -l)
+
+# Vérification de l'installation des paquets
+for Paquet in "${@}"
+do
+    if ! grep -qE "^ii  ${Paquet%%|*}[[:space:]]" <<< "${DpkgList}"
+    then
+        echo -e "${ROUGE}${Paquet%%|*} non installé !${RAZ}"
+        return 1
+    fi
+done
+
+# Si tout est OK
+return 0
+}
+
+
+# Vérification des dépendnaces et installation des paquets si besoin
+echo -e "\nChecking and installation of the packages..."
+Packages build-essential kf6-kio-dev kf6-kcoreaddons-dev kf6-kcoreaddons-dev cmake extra-cmake-modules
 
 # Création du dossier de build
 echo -e "\n(Remove and) Création of the build folder..."
@@ -66,6 +113,9 @@ then
     done
 fi
 EOF
+
+            # Vérification de la présence du paquet checkinstall
+            Packages checkinstall
 
             # Création et installation du paquet debian
             cd build && sudo checkinstall --pkgname "keneric" --maintainer "hizo@free.fr" --pkggroup "libs" --exclude "/home"
