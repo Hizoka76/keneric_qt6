@@ -10,7 +10,7 @@ De nombreuses choses ont évoluées entre KDE5 et KDE6.
 ### Description :
 keneric est un générateur de vignettes pour plasma KDE6 qui utilise un script (bash ou python) pour créer ces vignettes.
 
-L'idée du de base a été créé par <a href="mailto:samrog131@hotmail.com">Rog131</a> mais le fonctionnement a grandement évolué.
+La version initiale a été créée par <a href="mailto:samrog131@hotmail.com">Rog131</a> mais le fonctionnement a grandement évolué.
 
 
 ### Installation :
