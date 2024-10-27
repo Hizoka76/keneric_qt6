@@ -135,7 +135,7 @@ Once in the folder, run the compile.sh file (a simple script) which allows you t
    - Requires **checkinstall** package.
 
 #### From the binary :
-Download the <a href=“https://github.com/Hizoka76/keneric_qt6/releases/latest”>latest version</a> of the tar.gz file and extract the binary.
+Download the <a href="https://github.com/Hizoka76/keneric_qt6/releases/latest">latest version</a> of the tar.gz file and extract the binary.
 
 Move file **keneric.so** to folder **/usr/lib/x86_64-linux-gnu/qt6/plugins/kf6/thumbcreator**.
 
