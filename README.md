@@ -1,6 +1,6 @@
 # keneric
 ## Version Française :
-Cette nouvelle version pour KDE6 fait suite à https://github.com/Hizoka76/keneric qui fonctionnait pour KDE5.
+Cette nouvelle version pour KDE6 fait suite à <a href="https://github.com/Hizoka76/keneric">keneric</a> qui fonctionnait pour KDE5.
 
 Il a fallu modifier le fonctionnement de keneric et de son makefile pour le rendre compatible avec KDE6.
 
@@ -23,6 +23,7 @@ build-essential libkf6kio-dev libkf6coreaddons-dev cmake extra-cmake-modules
 Télécharger le contenu du git.
 
 Une fois dans le dossier, executer le fichier compile.sh (un script simple) qui permet :
+
  - D'installer automatiquement les paquets.
  - De compiler les sources.
  - De compiler les sources et d'installer les fichiers :
@@ -32,12 +33,13 @@ Une fois dans le dossier, executer le fichier compile.sh (un script simple) qui 
    - Necessite le paquet **checkinstall**.
 
 #### Depuis le binaire :
-Télécharger la **<a href="https://github.com/Hizoka76/keneric_qt6/releases/latest">dernière version</a>** du fichier tar.gz  et en extraire le binaire.
+Télécharger la <a href="https://github.com/Hizoka76/keneric_qt6/releases/latest">dernière version</a> du fichier tar.gz et en extraire le binaire.
 
 Déplacer le fichier **keneric.so** dans le dossier **/usr/lib/x86_64-linux-gnu/qt6/plugins/kf6/thumbcreator**.
 
 #### Depuis les fichier debian :
 2 versions sont proposées :
+
  - La version simple qui n'installe que **keneric.so** et **org.kde.keneric.metainfo.xml**.
  - La version full qui installe également le script keneric proposé ainsi que les services.
 
@@ -66,14 +68,15 @@ Il faudrait alors gérer les différents mimetypes dans des sous-scripts keneric
 **keneric.so** appelle le script **keneric** en lui fournissant des arguments et attend que celui-ci lui rende la main.
 
 Les arguments passés au script sont :
+
  - L'adresse du fichier attendant une vignette.
  - Le mimetype de ce fichier.
  - L'URL de la vignette temporaire (*/tmp/keneric/...*) que chargera **keneric.so**
 
-**keneric.so** chargera cette vignette temporaire et, si elle est valide, la fournira à **Dolphin** qui l'affichera.
+**keneric.so** chargera cette vignette temporaire et, si est valide, la fournira à **Dolphin** qui l'affichera.
 
 #### Script keneric :
-Ce script est appelé par **keneric.so**, il ne possède pas d'extension afin de pouvoir utiliser plusieurs langages comme **bash** ou **python**.
+Ce script est appelé par **keneric.so** et ne contient pas d'extension afin de pouvoir utiliser plusieurs langages comme **bash** ou **python**.
 
 Le script **keneric** doit être placé dans un dossier du path, pour voir ces dossiers :
 ```
@@ -99,7 +102,7 @@ Toutes les informations sont dans le [dossier Services](Services).
 
 
 ## English version:
-This new version for KDE6 follows on from https://github.com/Hizoka76/keneric, which worked for KDE5.
+This new version for KDE6 follows on from <a href="https://github.com/Hizoka76/keneric">keneric</a>, which worked for KDE5.
 
 The operation of keneric and its makefile had to be modified to make it compatible with KDE6.
 
@@ -122,6 +125,7 @@ build-essential libkf6kio-dev libkf6coreaddons-dev cmake extra-cmake-modules
 Download the git contents.
 
 Once in the folder, run the compile.sh file (a simple script) which allows you to :
+
  - Automatically install packages.
  - Compile the sources.
  - Compile the sources and install the :
@@ -131,12 +135,13 @@ Once in the folder, run the compile.sh file (a simple script) which allows you t
    - Requires **checkinstall** package.
 
 #### From the binary :
-Extract the binary from the tar.gz file: **https://github.com/Hizoka76/keneric_qt6/releases/latest**.
+Download the <a href=“https://github.com/Hizoka76/keneric_qt6/releases/latest”>latest version</a> of the tar.gz file and extract the binary.
 
 Move file **keneric.so** to folder **/usr/lib/x86_64-linux-gnu/qt6/plugins/kf6/thumbcreator**.
 
 #### From debian files :
 2 versions are available:
+
  - The simple version, which installs only **keneric.so** and **org.kde.keneric.metainfo.xml**.
  - The full version, which also installs the proposed keneric script and services.
 
@@ -164,6 +169,7 @@ The different mimetypes would then have to be managed in keneric sub-scripts.
 **keneric.so** calls the **keneric** script, providing it with arguments and waiting for it to hand over.
 
 The arguments passed to the script are :
+
  - The address of the file waiting for a thumbnail.
  - The mimetype of this file.
  - The URL of the temporary thumbnail (*/tmp/keneric/...*) to be loaded by **keneric.so**.
