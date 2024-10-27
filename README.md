@@ -116,7 +116,7 @@ The basic idea was created by <a href="mailto:samrog131@hotmail.com">Rog131</a> 
 #### From source:
 For Ubuntu derivatives, compilation requires the installation of : 
 ```
-build-essential kf6-kio-dev kf6-kcoreaddons-dev kf6-kcoreaddons-dev cmake extra-cmake-modules
+build-essential libkf6kio-dev libkf6coreaddons-dev cmake extra-cmake-modules
 ```
 
 Download the git contents.
