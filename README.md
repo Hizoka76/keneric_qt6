@@ -70,10 +70,10 @@ Les arguments passés au script sont :
  - Le mimetype de ce fichier.
  - L'URL de la vignette temporaire (*/tmp/keneric/...*) que chargera **keneric.so**
 
-**keneric.so** chargera cette vignette temporaire et, si est valide, la fournira à **Dolphin** qui l'affichera.
+**keneric.so** chargera cette vignette temporaire et, si elle est valide, la fournira à **Dolphin** qui l'affichera.
 
 #### Script keneric :
-Ce script est appelé par **keneric.so** et ne contient pas d'extension afin de pouvoir utiliser plusieurs langages comme **bash** ou **python**.
+Ce script est appelé par **keneric.so**, il ne possède pas d'extension afin de pouvoir utiliser plusieurs langages comme **bash** ou **python**.
 
 Le script **keneric** doit être placé dans un dossier du path, pour voir ces dossiers :
 ```
