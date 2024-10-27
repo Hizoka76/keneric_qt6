@@ -17,7 +17,7 @@ L'idée du de base a été créé par <a href="mailto:samrog131@hotmail.com">Rog
 #### Depuis les sources :
 Pour les dérivés d'Ubuntu, la compilation nécessite l'installation de paquets : 
 ```
-build-essential kf6-kio-dev kf6-kcoreaddons-dev kf6-kcoreaddons-dev cmake extra-cmake-modules
+build-essential libkf6kio-dev libkf6coreaddons-dev cmake extra-cmake-modules
 ```
 
 Télécharger le contenu du git.
