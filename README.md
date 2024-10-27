@@ -32,7 +32,7 @@ Une fois dans le dossier, executer le fichier compile.sh (un script simple) qui 
    - Necessite le paquet **checkinstall**.
 
 #### Depuis le binaire :
-Extraire le binaire du fichier tar.gz : **https://github.com/Hizoka76/keneric_qt6/releases/latest**.
+Télécharger la **<a href="https://github.com/Hizoka76/keneric_qt6/releases/latest">dernière version</a>** du fichier tar.gz  et en extraire le binaire.
 
 Déplacer le fichier **keneric.so** dans le dossier **/usr/lib/x86_64-linux-gnu/qt6/plugins/kf6/thumbcreator**.
 
