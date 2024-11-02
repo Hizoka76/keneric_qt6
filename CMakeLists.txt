@@ -24,7 +24,12 @@ include(ECMDeprecationSettings)
 find_package(Qt${QT_MAJOR_VERSION} ${QT_MIN_VERSION} CONFIG REQUIRED COMPONENTS Gui)
 find_package(KF${QT_MAJOR_VERSION} ${KF_MIN_VERSION} REQUIRED COMPONENTS KIO)
 
-kcoreaddons_add_plugin(keneric INSTALL_NAMESPACE "kf${QT_MAJOR_VERSION}/thumbcreator")
+#kcoreaddons_add_plugin(keneric INSTALL_NAMESPACE "kf${QT_MAJOR_VERSION}/thumbcreator")
+
+kcoreaddons_add_plugin(keneric
+    INSTALL_NAMESPACE "kf${QT_MAJOR_VERSION}/thumbcreator"
+    SOURCES keneric.cpp
+)
 
 target_sources(keneric PRIVATE
     keneric.cpp
@@ -37,7 +42,47 @@ target_link_libraries(keneric
 )
 
 
+
 install(FILES org.kde.keneric.metainfo.xml
         DESTINATION ${KDE_INSTALL_METAINFODIR})
+
+# Installation de l'icone
+install(FILES keneric.png
+        DESTINATION /usr/share/icons/hicolor/256x256/apps/)
+
+# Installation de keneric et ses scripts
+install(DIRECTORY Script/
+        DESTINATION /usr/share/keneric
+        FILES_MATCHING PATTERN "*")
+
+# Installation des scripts des services
+install(DIRECTORY Services/Scripts/
+        DESTINATION /usr/local/bin
+        FILES_MATCHING PATTERN "*")
+
+# Installation des menu services
+install(DIRECTORY Services/Desktop/
+        DESTINATION /usr/share/kio/servicemenus
+        FILES_MATCHING PATTERN "*")
+
+# Installation du fichier de config
+install(FILES conf/keneric.conf
+        DESTINATION /etc/)
+
+# Installation de la documentation
+install(DIRECTORY docs/
+        DESTINATION /usr/share/doc/keneric
+        FILES_MATCHING PATTERN "*.pdf")
+
+# Création du lien keneric dans /usr/local/bin
+install(CODE "execute_process(COMMAND ln -sf /usr/share/keneric/keneric /usr/local/bin/keneric)")
+
+# Mode execution des fichiers
+install(CODE "execute_process(COMMAND chmod +x /usr/share/keneric/keneric)")
+install(CODE "execute_process(COMMAND chmod +x /usr/local/bin/keneric-custom-icon)")
+install(CODE "execute_process(COMMAND chmod +x /usr/local/bin/keneric-delete-custom-icon)")
+install(CODE "execute_process(COMMAND chmod +x /usr/local/bin/keneric-hash-file)")
+install(CODE "execute_process(COMMAND chmod +x /usr/local/bin/keneric-recursive-remove-thumbnails)")
+install(CODE "execute_process(COMMAND chmod +x /usr/local/bin/keneric-remove-thumbnails)")
 
 feature_summary(WHAT ALL INCLUDE_QUIET_PACKAGES FATAL_ON_MISSING_REQUIRED_PACKAGES)

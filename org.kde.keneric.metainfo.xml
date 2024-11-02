@@ -12,20 +12,16 @@
   <summary>Graphics file format thumbnailers for KDE applications</summary>
   <summary xml:lang="fr">Créateurs de vignettes de fichiers au format graphique pour les applications KDE</summary>
   <description>
-    <p>keneric makes it easy to create file thumbnails using a bash or pyhon script...</p>
-    <p xml:lang="fr">keneric permet de créer simplement des vignettes de fichiers via un script bash ou pyhon...</p>
+    <p>These plugins allow KDE software to display thumbnails for PostScript, RAW, Mobipocket, and Blender files.</p>
+    <p xml:lang="fr">Ces modules externes permettent aux logiciels de KDE de créer des vignettes pour les formats de fichiers définis par l'utilisateur.</p>
   </description>
-  <url type="homepage">https://github.com/Hizoka76/keneric_qt6</url>
+  <url type="homepage">https://www.kde.org</url>
+  <url type="bugtracker">https://bugs.kde.org/</url>
   <screenshots>
     <screenshot type="default">
-      <image>https://github.com/Hizoka76/keneric_qt6/blob/main/readme_img/ScriptKenericDirectoryEg.png</image>
-      <caption>Example of folder rendering using the script supplied with keneric</caption>
-      <caption xml:lang="fr">Exemple de rendu de dossiers avec le script fourni avec keneric</caption>
-    </screenshot>
-    <screenshot>
-      <image>https://github.com/Hizoka76/keneric_qt6/blob/main/readme_img/VideoMatroskaCover.png</image>
-      <caption>Example of matroska files rendering using the script supplied with keneric</caption>
-      <caption xml:lang="fr">Exemple de rendu de fichiers matroska avec le script fourni avec keneric</caption>
+      <image>https://cdn.kde.org/screenshots/kdegraphics-thumbnailers/kdegraphics-thumbnailers.png</image>
+      <caption>Dolphin with PostScript thumbnail</caption>
+      <caption xml:lang="fr">Dolphin avec une vignette PostScript</caption>
     </screenshot>
   </screenshots>
   <project_group>KDE</project_group>

@@ -2,12 +2,12 @@
     "CacheThumbnail": true,
     "KPlugin": {
         "MimeTypes": [
-            "video/*",
+            "application/octet-stream",
             "inode/directory"
         ],
-        "Name": "Files supported by Keneric (videos, directory)",
-        "Name[fr]": "Fichiers pris en charge par Keneric (videos, dossiers)"
+        "Name": "Files supported by Keneric (all types)",
+        "Name[fr]": "Fichiers pris en charge par Keneric (tous les types)"
     },
-    "MimeType": "video/*;inode/directory;"
+    "MimeType": "application/octet-stream;inode/directory;"
 }
 

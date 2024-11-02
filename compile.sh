@@ -118,7 +118,7 @@ EOF
             Packages checkinstall
 
             # Création et installation du paquet debian
-            cd build && sudo checkinstall --pkgname "keneric" --maintainer "hizo@free.fr" --pkggroup "libs" --exclude "/home"
+            cd build && sudo checkinstall --fstrans=no --pkgname "keneric" --maintainer "hizo@free.fr" --pkggroup "libs" --exclude "/home" --recommends "imagemagick,mkvtoolnix,ffmpegthumbnailer,xclip,kdialog"
 
             break ;;
     esac

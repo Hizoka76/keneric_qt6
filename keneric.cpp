@@ -150,7 +150,7 @@ KIO::ThumbnailResult Keneric::create(const KIO::ThumbnailRequest &request)
         // Chargement du fichier de config qui est créé si besoin
         QSettings settingsValues(settingsFile, QSettings::NativeFormat);
 
-        // Mode debug, vu que l'info est dans general, il ne faut pas préciser le groupe'
+        // Mode debug, vu que l'info est dans general, il ne faut pas préciser le groupe
         if (settingsValues.contains(QStringLiteral("debugMode")))
         {
             debugMode = settingsValues.value(QStringLiteral("debugMode")).toBool();
@@ -412,12 +412,12 @@ KIO::ThumbnailResult Keneric::create(const KIO::ThumbnailRequest &request)
             debugContent << QStringLiteral("Thumb temporary exists") << QStringLiteral("\n");
         }
 
-        // Vérifier si le chargement a réussi
-        if (! img.isNull())
-        {
-            // Chargement de l'image temporaire en mémoire
-            QImage previewImage(protoThumbnail);
+        // Chargement de l'image temporaire en mémoire
+        QImage previewImage(protoThumbnail);
 
+        // Vérifie que l'image n'est pas vide
+        if (! previewImage.isNull())
+        {
             // Redimensionnement de l'image temporaire chargée en mémoire
             img = previewImage.scaled(256, 256, Qt::KeepAspectRatio, Qt::SmoothTransformation);
 
