@@ -10,11 +10,11 @@ Voici ce que cela peut donner :
 
 Pour les dossiers :
 
-![Screenshot d'exemples de vignettes pour les dossiers.](readme_img/ScriptKenericDirectoryEg.png)
+![Screenshot d'exemples de vignettes pour les dossiers.](/readme_img/ScriptKenericDirectoryEg.png)
 
 Pour les fichiers matroska (mkv) :
 
-![Screenshot d'exemples de vignettes pour les fichiers matroska.](readme_img/VideoMatroskaCover.png)
+![Screenshot d'exemples de vignettes pour les fichiers matroska.](/readme_img/VideoMatroskaCover.png)
 
 ### Fonctionnement :
 Tous les scripts doivent être dans un dossier du path : 
