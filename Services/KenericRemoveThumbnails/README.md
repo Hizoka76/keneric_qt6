@@ -31,7 +31,7 @@ This menu service allows to delete the thumbnails's items and reload the Dolphin
 ### Installation:
 The **keneric-remove-thumbnails.desktop** file should be put in a folder in the KDE6 path:
 ```
-kf5-config --path services
+qtpaths --locate-dirs GenericDataLocation kio/servicemenus
 ```
 
 This file must be made executable (by right-clicking, for example) or via :
