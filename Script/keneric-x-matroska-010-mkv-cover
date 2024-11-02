@@ -116,7 +116,7 @@ then
     LogFileMessage "ffmpegthumbnailer used."
 
     # Extraction d'une image avec ffmpegthumbnailer
-    ffmpegthumbnailer -t 20 -s 256 -i "${FullName}" -o "${ExportPicture}" |& LogFileMessage
+    ffmpegthumbnailer -s 256 -i "${FullName}" -o "${ExportPicture}" |& LogFileMessage
 
     # Ajout d'une bordure si convert est disponible
     Dependencies convert:imagemagick && convert -bordercolor ${BorderColor} -border 5 "${ExportPicture}" "${ExportPicture}" |& LogFileMessage

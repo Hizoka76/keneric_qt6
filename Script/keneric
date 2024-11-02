@@ -3,17 +3,22 @@
 #############
 ## Version ##
 #############
-# v0.7 - 2023/12/09 :
+# v0.7 - 2023/12/16 :
     # Ajout de la fonction SearchInFolder.
     # Mise en place des source des scripts.
     # Automatisation du chargement des sources avec la fonction SourceLoader.
     # Amélioration du système du fichier log avec (en autre) LogFileMessage.
+    # Utilisation du fichier de config keneric.conf
+        # [general]
+        # LogEnabled=1
+        # LogFile=/tmp/keneric.conf
 
 # v0.6 - 2023/09/07 :
     # Création d'un fichier log dans le dossier tmp.
 
 # v0.5 - 2022/06/14 :
     # Ajout des encadrés des mkv.
+
 
 
 #################
@@ -33,6 +38,9 @@ ExportPicture="${3}"
 # Nom de la vignette attendue
 Thumb="${ExportPicture##*/}"
 
+# Variable indiquant que la vignette a été créée lorsqu'elle passe à 1
+ThumbCreated=0
+
 
 ###################################
 ## Emplacement du script keneric ##
@@ -51,24 +59,6 @@ done
 
 # Emplacement du script
 ExecFolder="$(cd -P "${Source%/*}" >/dev/null 2>&1 && pwd)"
-
-
-#################
-## Fichier log ##
-#################
-# Pour activer le mode log, il faut passer LogEnabled à 1
-# Attention ! Il ne faut pas laisser ce mode actif sans raison car cela va créer un gros fichier log !
-LogEnabled=0
-(( LogEnabled )) && LogRedirection="/tmp/keneric.log" || LogRedirection="/dev/null"
-
-echo -e "-----\n${ExecFolder}/keneric ${1} ${2} ${3} ${Thumb}" >> "${LogRedirection}"
-
-
-##################
-## Vérification ##
-##################
-# Si la vignette existe déjà, on ne fait rien, ce n'est pas sensé se produire
-[[ -e "${HOME}/.cache/thumbnails/large/${Thumb}.png" || -e "${HOME}/.cache/thumbnails/normal/${Thumb}.png" ]] && exit
 
 
 #########################
@@ -122,6 +112,7 @@ function SearchInFolder
 function SourceLoader
 {
     # $1 : Base de nom des scripts, ex : folder, video
+    (( ThumbCreated )) && EndOfScript
 
     # Recherche tous les scripts de type keneric-$1- et les tri par nom ce qui permet de définir un ordre de priorité dans les scripts
     mapfile -td '' KenericScripts < <(find "${ExecFolder}" -mindepth 1 -maxdepth 1 -iname "keneric-${1}-[0-9][0-9][0-9]-*" -print0 | sort -uz)
@@ -129,7 +120,9 @@ function SourceLoader
     # Chargement de chaque script
     for KenericScript in "${KenericScripts[@]}"
     do
+        LogFileMessage "Sourcing of the script: ${KenericScript}"
         source "${KenericScript}"
+        (( ThumbCreated )) && EndOfScript
     done
 }
 
@@ -139,8 +132,83 @@ function LogFileMessage
 {
     # $1 : Message
     # ${BASH_SOURCE[0]##*/} correspond au nom du script sourcé
-    echo "${BASH_SOURCE[0]##*/} : ${1}" >> "${LogRedirection}"
+
+    local FromPipe
+
+    # FromPipe : Si LogFileMessage appelé via un pipe
+    if [[ -z ${1} ]]
+    then
+        while read -r FromPipe
+        do
+            LogFileMessages+=("${FromPipe}")
+        done
+
+    # $1 : Si LogFileMessage appelé directement avec un argument
+    else
+        LogFileMessages+=("${1}")
+    fi
 }
+
+
+# Arrêt du script
+function EndOfScript
+{
+    # Envoi des logs en une fois pour éviter les mélanges
+    LogFileMessagesToReturn=$(printf "\n%s" "${LogFileMessages[@]}")
+    echo -e "${LogFileMessagesToReturn:1}" &>> "${LogRedirection}"
+
+    exit 0
+}
+
+
+#######################
+## Fichier de config ##
+#######################
+# Chargement des données du fichier de config
+ConfigFile="${HOME}/.config/keneric.conf"
+
+# Lecture du fichier de config avec séparation des clés et de leurs valeurs
+while IFS='=' read -r Key Value; do
+    # Si la clé et la valeur existe, si la clé ne commence pas par un # et si la variable portant le nom de la clé n'existe pas
+    if [[ ${Key} && ${Value} && ${Key:0:1} != "#" && -z ${!Key} ]]
+    then
+        # Déclaration de la variable et de sa valeur
+        declare "${Key}=${Value}"
+    fi
+done < "${ConfigFile}"
+
+
+#################
+## Fichier log ##
+#################
+# Pour activer le mode log, il faut passer LogEnabled à 1 dans le fichier de config
+# Attention ! Il ne faut pas laisser ce mode actif sans raison car cela va créer un gros fichier log !
+(( ${LogEnabled:-0} )) && LogRedirection="${LogRedirection:-/tmp/keneric.log}" || LogRedirection="/dev/null"
+
+# Liste qui contiendra les messages de log
+LogFileMessages=()
+
+# Permet au dernier pipe d'être dans le shell actuel et de récupérer les retours des commandes via : command |& LogFileMessage
+shopt -s lastpipe
+
+# Message log de base
+LogFileMessage "-----"
+LogFileMessage "script: ${ExecFolder}/keneric"
+LogFileMessage "\$1 / FullName: ${FullName}"
+LogFileMessage "\$2 / MimeType: ${MimeType}"
+LogFileMessage "\$3 / ExportPicture: ${ExportPicture}"
+LogFileMessage "Thumb: ${Thumb}"
+
+
+##################
+## Vérification ##
+##################
+# Si la vignette existe déjà, on ne fait rien, ce n'est pas sensé se produire
+if [[ -e "${HOME}/.cache/thumbnails/large/${Thumb}.png" || -e "${HOME}/.cache/thumbnails/normal/${Thumb}.png" ]]
+then
+    LogFileMessage "Thumbnail already exists."
+    exit 0
+fi
 
 
 ######################################
@@ -149,6 +217,7 @@ function LogFileMessage
 # Chargement des scripts en se basant sur le MimeType
     # Ex : video/x-matroska => video-x-matroska => Recherche des scripts nommés keneric-video-x-matroska-[0-9][0-9][0-9]-
     # Ex : audio/ac3 => audio-ac3 => Recherche des scripts nommés keneric-audio-ac3-[0-9][0-9][0-9]-
+
 SourceLoader "${MimeType//\//-}"
 
 # Chargement des scripts en se basant sur le 2e élément du MimeType
@@ -159,34 +228,40 @@ SourceLoader "${MimeType##*/}"
 # Chargement des scripts en se basant sur le 1er élément du MimeType
     # Ex : video/x-matroska => video => Recherche des scripts nommés keneric-video-[0-9][0-9][0-9]-
     # Ex : audio/ac3 => audio => Recherche des scripts nommés keneric-audio-[0-9][0-9][0-9]-
-SourceLoader "${MimeType%%/*}" ;;
+SourceLoader "${MimeType%%/*}"
+
+# Récapitulatif de l'ordre d'exécution :
+    # script-video-x-matroska-[0-9][0-9][0-9]-
+        # script-x-matroska-[0-9][0-9][0-9]-
+            # script-video-[0-9][0-9][0-9]-
+
+# Fin du script
+EndOfScript
 
 
 ##################################
 ## Informations sur les scripts ##
 ##################################
 # Ils peuvent utiliser les fonctions partagées :
-    # Dependencies : À utiliser pour vérifier des dépendances avant d'utiliser les commandes liées.
-    # SearchInFolder : Utile pour la recherche d'un fichier dans un dossier
-    # LogFileMessage : Fonction d'envoi de message au fichier log s'il est actif.
-        # Ex de message : LogFileMessage "NoKeneric file found : ${Image}"
-
+#     Dependencies : À utiliser pour vérifier des dépendances avant d'utiliser les commandes liées.
+#     SearchInFolder : Utile pour la recherche d'un fichier dans un dossier
+#     LogFileMessage : Fonction d'envoi de message au fichier log s'il est actif.
+#         Ex de message : LogFileMessage "NoKeneric file found : ${Image}"
+#         Ex de message d'erreur : convert ...  |& LogFileMessage
+#
 # Ils peuvent utiliser les variables globales :
-    # FullName : Adresse du fichier/dossier.
-    # MimeType : Mimetype du fichier/dossier.
-    # ExportPicture : Adresse de la vignette du fichier/dossier qui sera reprise par keneric.
-    # Thumb : Nom de la vignette attendue
-    # ExecFolder : Dossier du script keneric.
-    # LogRedirection : Fonction d'envoi de message retour de commande au fichier log s'il est actif.
-        # Ex de message d'erreur : convert ... 2>> "${LogRedirection}"
-
+#     FullName : Adresse du fichier/dossier.
+#     MimeType : Mimetype du fichier/dossier.
+#     ExportPicture : Adresse de la vignette du fichier/dossier qui sera reprise par keneric.
+#     Thumb : Nom de la vignette attendue
+#     ExecFolder : Dossier du script keneric.
+#     LogRedirection : Sorite des retours des messages log.
+#
 # Toujours déclarer les variables (avec leurs valeurs par défaut) avant de les tester afin d'éviter qu'un précédent script ait créés des variables de même nom.
-
+#
 # Un script n'ayant pas créé la vignette ne doit pas faire de return ou d'exit.
-# Un script ayant créé la vignette doit l'avoir exporté vers $ExportPicture et faire un exit 0 afin d'arrêter keneric.
-
+# Un script ayant créé la vignette doit l'avoir exporté vers $ExportPicture et faire un ThumbCreated=1 afin de terminer le script keneric.
+#
 # Il n'est pas obligatoire que les scripts soient exécutables.
-
-# Si le script touche un sous type de MimeType, il faut encadrer le code du script dans un IF qui vérifie le MimeType.
-
+#
 # Les noms des scripts sont importants car avant d'être chargés, ils sont triés par leur nom, ce qui crée un ordre d'exécution des scripts.

@@ -12,5 +12,5 @@ Image=$(SearchInFolder ".?NoKeneric")
 if [[ -f "${Image}" ]]
 then
     LogFileMessage "NoKeneric file found : ${Image}"
-    exit 0
+    ThumbCreated=1
 fi

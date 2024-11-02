@@ -56,24 +56,24 @@ then
                 if Dependencies ksvgtopng5:kde-cli-tools
                 then
                     LogFileMessage "svg : ksvgtopng5 used."
-                    ksvgtopng5 256 256 "${Icon}" "/tmp/directory_icon.png" 2>> "${LogRedirection}"
+                    ksvgtopng5 256 256 "${Icon}" "/tmp/directory_icon.png" |& LogFileMessage
 
                 # Utilisation de rsvg-convert qui donne un résultat bien plus propre pour une taille moindre que convert
                 elif Dependencies rsvg-convert:librsvg2-bin
                 then
                     LogFileMessage "svg : rsvg-convert used."
-                    rsvg-convert "${Icon}" -f png -a -w 256 -o "/tmp/directory_icon.png" 2>> "${LogRedirection}"
+                    rsvg-convert "${Icon}" -f png -a -w 256 -o "/tmp/directory_icon.png" |& LogFileMessage
 
                 # Imagemagick donne un mauvais résultat...
                 else
                     LogFileMessage "svg : convert used."
-                    convert -resize "256x256" -format png "${Icon}" "/tmp/directory_icon.png" 2>> "${LogRedirection}"
+                    convert -resize "256x256" -format png "${Icon}" "/tmp/directory_icon.png" |& LogFileMessage
                 fi
 
             # Sinon on redimensionne l'image en 256px si besoin
             else
                 LogFileMessage "convert used."
-                convert -resize "256x256>" "${Icon}" "/tmp/directory_icon.png" 2>> "${LogRedirection}"
+                convert -resize "256x256>" "${Icon}" "/tmp/directory_icon.png" |& LogFileMessage
             fi
 
             # Arrêt du travail si l'icône temporaire n'existe pas
@@ -99,7 +99,7 @@ then
         # Il ne faut pas aplatir les images ayant un canal alpha avec colors
         [[ $(identify -format '%A' "${Image}") == "False" ]] && Arg="-bordercolor black -border 1 -colors 96"
 
-        convert -resize "212x124>" ${Arg} "${Image}" "/tmp/thumb_icon.png" 2>> "${LogRedirection}"
+        convert -resize "212x124>" ${Arg} "${Image}" "/tmp/thumb_icon.png" |& LogFileMessage
 
         if [[ -f "/tmp/thumb_icon.png" ]]
         then
@@ -110,13 +110,13 @@ then
             h=$(( (${DirectorySize#*x} - ${ImageSize#*x}) / 2 + 30 )) # Décalage de 30px pour bien le placer
 
             # Empilement des 2 images
-            composite -compose src-over "/tmp/thumb_icon.png" "/tmp/directory_icon.png" -geometry +${w}+${h} -format png "${ExportPicture}" 2>> "${LogRedirection}"
+            composite -compose src-over "/tmp/thumb_icon.png" "/tmp/directory_icon.png" -geometry +${w}+${h} -format png "${ExportPicture}" |& LogFileMessage
 
             # Suppression de l'image
-            rm "/tmp/thumb_icon.png" 2>> "${LogRedirection}"
+            rm "/tmp/thumb_icon.png" |& LogFileMessage
 
-            # Si une vignette a été créée, on stoppe le script
-            exit 0
+            # Si une vignette a été créée, on l'indique
+            ThumbCreated=1
         fi
     fi
 fi
