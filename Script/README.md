@@ -10,7 +10,7 @@ Voici ce que cela peut donner :
 
 Pour les dossiers :
 
-![Screenshot d'exemples de vignettes pour les dossiers.](/readme_img/ScriptKenericDirectoryEg.png)
+<img src="https://github.com/Hizoka76/keneric_qt6/blob/main/readme_img/ScriptKenericDirectoryEg.png" width="220" height="800">
 
 Pour les fichiers matroska (mkv) :
 
