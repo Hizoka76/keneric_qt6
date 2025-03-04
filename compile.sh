@@ -58,6 +58,19 @@ mkdir build
 echo -e "\nPreparation of the build..."
 cmake -B build/
 
+# Copie du dossier Services original
+[[ ! -e "Services_original" ]] && mv "Services" "Services_original"
+
+# Dossier Services
+[[ -e "Services" ]] && rm -rf "Services"
+mkdir -p "Services"/{Desktop,Scripts}
+
+# Reprise des fichiers desktop
+find "Services_original" -type f -iname "*.desktop" -exec cp {} "Services/Desktop" \;
+
+# Reprise des fichiers sans extension
+find "Services_original" -type f ! -name "*.*" -exec cp {} "Services/Scripts" \;
+
 echo -e "\nWhat do you want?"
 select Action in "Just compile" "Make install" "Create an debian package"
 do
